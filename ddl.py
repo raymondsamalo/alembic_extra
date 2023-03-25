@@ -74,14 +74,14 @@ class AddDDLOp(MigrateOperation):
     def to_diff_tuple(self) -> Tuple[Any, ...]:
         pass
 
-    def __init__(self, ddl_name, schema, hypertable_name):
-        self.table_name = hypertable_name
+    def __init__(self, ddl_name, schema, table_name):
+        self.table_name = table_name
         self.schema = schema
         self.ddl_name = ddl_name
 
     @classmethod
-    def add_ddl(cls, operations, ddl_name, schema, hypertable_name, **kw):
-        op = AddDDLOp(ddl_name, schema, hypertable_name, **kw)
+    def add_ddl(cls, operations, ddl_name, schema, table_name, **kw):
+        op = AddDDLOp(ddl_name, schema, table_name, **kw)
         return operations.invoke(op)
 
     def reverse(self):
@@ -101,13 +101,13 @@ class DropDDLOp(MigrateOperation):
         self.ddl_name = ddl_name
 
     @classmethod
-    def drop_ddl(cls, operations, ddl_name, schema, hypertable_name, **kw):
-        op = DropDDLOp(ddl_name, schema, hypertable_name, **kw)
+    def drop_ddl(cls, operations, ddl_name, schema, table_name, **kw):
+        op = DropDDLOp(ddl_name, schema, table_name, **kw)
         return operations.invoke(op)
 
     def reverse(self):
         # only needed to support autogenerate
-        return AddDDLOp(self.ddl_name, self.hypertable_name, self.schema)
+        return AddDDLOp(self.ddl_name, self.table_name, self.schema)
 
 
 @Operations.implementation_for(AddDDLOp)
